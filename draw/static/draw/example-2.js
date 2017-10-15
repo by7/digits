@@ -1,7 +1,3 @@
-/* © 2009 ROBO Design
- * http://www.robodesign.ro
- */
-
 // Keep everything in anonymous function, called on window load.
 if(window.addEventListener) {
 window.addEventListener('load', function () {
@@ -26,7 +22,7 @@ window.addEventListener('load', function () {
       alert('Error: failed to getContext!');
       return;
     }
-	context.lineWidth = 1;
+	context.lineWidth = 5;
 
     // Pencil tool instance.
     tool = new tool_pencil();
@@ -35,28 +31,32 @@ window.addEventListener('load', function () {
     canvas.addEventListener('mousedown', ev_canvas, false);
     canvas.addEventListener('mousemove', ev_canvas, false);
     canvas.addEventListener('mouseup',   ev_canvas, false);
-	canvas.addEventListener('touchstart',   ev_canvas_touch, false);
-	canvas.addEventListener('touchmove',   ev_canvas_touch, false);
-	canvas.addEventListener('touchend',   ev_canvas_touch, false);
   }
 
+  
+  function getOffset( el ) {
+    var _x = 0;
+    var _y = 0;
+    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+        _x += el.offsetLeft - el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+  }
+  
   // This painting tool works like a drawing pencil which tracks the mouse 
   // movements.
   function tool_pencil () {
     var tool = this;
     this.started = false;
-
+	var offset = getOffset(canvas);
+	
     // This is called when you start holding down the mouse button.
     // This starts the pencil drawing.
     this.mousedown = function (ev) {
         context.beginPath();
-        context.moveTo(ev._x, ev._y);
-        tool.started = true;
-    };
-	
-	this.touchstart = function (ev) {
-        context.beginPath();
-        context.moveTo(ev._x, ev._y);
+        context.moveTo((ev.pageX-offset.left), (ev.pageY-offset.top));
         tool.started = true;
     };
 
@@ -65,14 +65,7 @@ window.addEventListener('load', function () {
     // the mouse button).
     this.mousemove = function (ev) {
       if (tool.started) {
-        context.lineTo(ev._x, ev._y);
-        context.stroke();
-      }
-    };
-	
-	this.touchmove = function (ev) {
-      if (tool.started) {
-        context.lineTo(ev._x, ev._y);
+        context.lineTo((ev.pageX-offset.left), (ev.pageY-offset.top));
         context.stroke();
       }
     };
@@ -84,25 +77,11 @@ window.addEventListener('load', function () {
         tool.started = false;
       }
     };
-	
-	this.touchend = function (ev) {
-      if (tool.started) {
-        tool.touchmove(ev);
-        tool.started = false;
-      }
-    };
   }
 
   // The general-purpose event handler. This function just determines the mouse 
   // position relative to the canvas element.
   function ev_canvas (ev) {
-    if (ev.layerX || ev.layerX == 0) { // Firefox
-      ev._x = ev.layerX;
-      ev._y = ev.layerY;
-    } else if (ev.offsetX || ev.offsetX == 0) { // Opera
-      ev._x = ev.offsetX;
-      ev._y = ev.offsetY;
-    }
 
     // Call the event handler of the tool.
     var func = tool[ev.type];
@@ -130,20 +109,3 @@ window.addEventListener('load', function () {
   init();
 
 }, false); }
-
-// Prevent scrolling when touching the canvas
-document.body.addEventListener("touchstart", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
-document.body.addEventListener("touchend", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
-document.body.addEventListener("touchmove", function (e) {
-  if (e.target == canvas) {
-    e.preventDefault();
-  }
-}, false);
