@@ -10,10 +10,17 @@
 </style>
 </head>
 
+<script type="text/javascript">
+	function handleIt() {
+		var dataURL = document.getElementById('imageView').toDataURL("image/png");
+		document.getElementById('id_draw_image').value = dataURL;
+	}
+</script>
+
 <body>
-<p>Hold down the mouse button to draw in the rectangle below.</p>
+<!--<p>Hold down the mouse button to draw in the rectangle below.</p>-->
 <div id="container">
-<canvas id="imageView" width="400" height="300">
+<canvas id="imageView" width="88" height="88">
 <p>Unfortunately, your browser is currently unsupported by our web application. We are sorry for the inconvenience. Please use one of the supported browsers listed below, or draw the image you want using an offline tool.</p>
 <p>Supported browsers: 
 <a href="http://www.opera.com">Opera</a>, 
@@ -22,6 +29,17 @@
 <a href="http://www.konqueror.org">Konqueror</a>.
 </p>
 </canvas>
+<form action="javascript:handleIt()">
+    <input id="hidden_img" type="hidden">
+    <input type="submit" value="Submit">
+</form>
+
+<form action="/draw/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
 </div>
 <script type="text/javascript" src="{% static "draw/example-2.js" %}"></script>
 </body>

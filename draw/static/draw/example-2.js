@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
       alert('Error: failed to getContext!');
       return;
     }
-	context.lineWidth = 5;
+	context.lineWidth = 1;
 
     // Pencil tool instance.
     tool = new tool_pencil();
