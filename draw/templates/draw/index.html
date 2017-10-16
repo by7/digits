@@ -40,6 +40,19 @@
     <input type="submit" value="Submit" />
 </form>
 
+<table>
+  <tr>
+    <th>Label</th>
+    <th>Weight</th> 
+  </tr>
+{% for o in y_list %}
+  <tr>
+    <td>label</td>
+    <td>{{ o }}</td> 
+  </tr>
+{% endfor %}
+</table>
+
 </div>
 <script type="text/javascript" src="{% static "draw/example-2.js" %}"></script>
 </body>
