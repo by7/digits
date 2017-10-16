@@ -30,9 +30,7 @@ def index(request):
                 #pass
 
             # Decode the 64 bit string into 32 bit and save
-            with open("imageToSave.png", "wb") as fh:
-                fh.write(base64.b64decode(ImageData))
-            y_list = predict_number()[0].tolist()
+            y_list = predict_number(base64.b64decode(ImageData))[0].tolist()
             print(y_list)
             # redirect to a new URL:
             #return HttpResponseRedirect('/thanks/')
@@ -43,7 +41,7 @@ def index(request):
 
     return render(request, 'draw/index.html', {'form': form, 'y_list': y_list})
 
-def predict_number():
+def predict_number(ImageData):
     sess=tf.Session()    
     #First let's load meta graph and restore weights
     saver = tf.train.import_meta_graph('deep_model/deep_model.meta')
@@ -55,7 +53,8 @@ def predict_number():
     graph = tf.get_default_graph()
     x = graph.get_tensor_by_name("x:0")
     keep_prob = graph.get_tensor_by_name("dropout/keep_prob:0")
-    image = tf.image.decode_png(tf.read_file('imageToSave.png'), channels=1)
+    sess.run(tf.global_variables_initializer())
+    image = tf.image.decode_png(ImageData, channels=1)
     #image = tf.transpose(image, [1, 0, 2])
     image = tf.image.rgb_to_grayscale(tf.image.resize_images(image,[28,28]))
     image = tf.reshape(image, [1, 784]).eval(session=sess)

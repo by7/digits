@@ -2,7 +2,14 @@
 if(window.addEventListener) {
 window.addEventListener('load', function () {
   var canvas, context, tool;
-
+  
+  function updateData() {
+    var dataURL = document.getElementById('imageView').toDataURL("image/png");
+    var hidden = document.getElementById('id_draw_image');
+    hidden.value = "";
+    hidden.value = dataURL;
+  }
+  
   function init () {
     // Find the canvas element.
     canvas = document.getElementById('imageView');
@@ -76,6 +83,7 @@ window.addEventListener('load', function () {
         tool.mousemove(ev);
         tool.started = false;
       }
+	  updateData();
     };
   }
 

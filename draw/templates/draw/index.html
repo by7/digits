@@ -10,13 +10,6 @@
 </style>
 </head>
 
-<script type="text/javascript">
-	function handleIt() {
-		var dataURL = document.getElementById('imageView').toDataURL("image/png");
-		document.getElementById('id_draw_image').value = dataURL;
-	}
-</script>
-
 <body>
 <!--<p>Hold down the mouse button to draw in the rectangle below.</p>-->
 <div id="container">
@@ -29,10 +22,6 @@
 <a href="http://www.konqueror.org">Konqueror</a>.
 </p>
 </canvas>
-<form action="javascript:handleIt()">
-    <input id="hidden_img" type="hidden">
-    <input type="submit" value="Submit">
-</form>
 
 <form action="/draw/" method="post">
     {% csrf_token %}
@@ -48,7 +37,7 @@
 {% for o in y_list %}
   <tr>
     <td>label</td>
-    <td>{{ o }}</td> 
+    <td>{{ o|floatformat:4 }}</td> 
   </tr>
 {% endfor %}
 </table>
