@@ -53,7 +53,7 @@ def predict_number(ImageData):
     graph = tf.get_default_graph()
     x = graph.get_tensor_by_name("x:0")
     keep_prob = graph.get_tensor_by_name("dropout/keep_prob:0")
-    sess.run(tf.global_variables_initializer())
+    #sess.run(tf.global_variables_initializer())
     image = tf.image.decode_png(ImageData, channels=1)
     #image = tf.transpose(image, [1, 0, 2])
     image = tf.image.rgb_to_grayscale(tf.image.resize_images(image,[28,28]))

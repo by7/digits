@@ -36,7 +36,7 @@
   </tr>
 {% for o in y_list %}
   <tr>
-    <td>label</td>
+    <td>{{ forloop.counter0 }}</td>
     <td>{{ o|floatformat:4 }}</td> 
   </tr>
 {% endfor %}
