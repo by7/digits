@@ -29,6 +29,8 @@ window.addEventListener('load', function () {
       alert('Error: failed to getContext!');
       return;
     }
+	context.fillStyle="#FFFFFF";
+	context.fillRect(0,0,112,112);
 	context.lineWidth = 5;
 
     // Pencil tool instance.
